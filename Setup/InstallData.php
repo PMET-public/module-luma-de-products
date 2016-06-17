@@ -17,12 +17,14 @@ class InstallData implements InstallDataInterface
     protected $storeView;
     protected $product;
     private $state;
+    private $index;
 
 
     public function __construct(\Magento\Framework\Setup\SampleData\Context $sampleDataContext,
                                 \Magento\Store\Model\Store $storeView,
                                 \Magento\Catalog\Model\ProductFactory $productFactory,
-                                \Magento\Framework\App\State $state)
+                                \Magento\Framework\App\State $state,
+                                \Magento\Indexer\Model\Processor $index)
     {
 
         try{
@@ -37,10 +39,14 @@ class InstallData implements InstallDataInterface
         $this->csvReader = $sampleDataContext->getCsvReader();
         $this->storeView = $storeView;
         $this->productFactory = $productFactory;
+        $this->index = $index;
     }
 
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
+        //Need to reindex to make sure the 2nd store index tables exist before saving products.
+        $this->index->reindexAll();
+
         //get view id from view code
         $_viewId = $this->storeView->load($this->config['viewCode'])->getStoreId();
 
@@ -57,7 +63,6 @@ class InstallData implements InstallDataInterface
                 $_data[$_header[$_key]] = $_value;
             }
             $_row = $_data;
-            echo $_row['sku'];
             $_product->load($_product->getIdBySku($_row['sku']));
             $_product->setStoreId($_viewId);
             $_product->setName($_row['name']);
