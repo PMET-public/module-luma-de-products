@@ -9,6 +9,7 @@
             <module name="Magento_GroupedSampleData"/>
             <module name="Magento_CmsSampleData"/>
             <module name="MagentoEse_LumaDESetup"/>
+            <module name="FireGento_FastSimpleImport2"/>
         </sequence>
     </module>
 </config>

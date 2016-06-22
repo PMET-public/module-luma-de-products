@@ -13,18 +13,20 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 class InstallData implements InstallDataInterface
 {
 
-    protected $sampleDataContext;
-    protected $storeView;
-    protected $product;
+    private $sampleDataContext;
+    private $storeView;
+    private $product;
     private $state;
     private $index;
+    private $objectManager;
 
 
     public function __construct(\Magento\Framework\Setup\SampleData\Context $sampleDataContext,
                                 \Magento\Store\Model\Store $storeView,
                                 \Magento\Catalog\Model\ProductFactory $productFactory,
                                 \Magento\Framework\App\State $state,
-                                \Magento\Indexer\Model\Processor $index)
+                                \Magento\Indexer\Model\Processor $index,
+                                \Magento\Framework\ObjectManagerInterface   $objectManager)
     {
 
         try{
@@ -40,35 +42,60 @@ class InstallData implements InstallDataInterface
         $this->storeView = $storeView;
         $this->productFactory = $productFactory;
         $this->index = $index;
+        $this->objectManager=$objectManager;
+
     }
 
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         //Need to reindex to make sure the 2nd store index tables exist before saving products.
-        $this->index->reindexAll();
+        //$this->index->reindexAll();
 
         //get view id from view code
         $_viewId = $this->storeView->load($this->config['viewCode'])->getStoreId();
 
         //get category label translations
-        $_fileName = $this->fixtureManager->getFixture('MagentoEse_LumaDEProducts::fixtures/Products.csv');
+        $_fileName = $this->fixtureManager->getFixture('MagentoEse_LumaDEProducts::fixtures/Test.csv');
         $_rows = $this->csvReader->getData($_fileName);
 
         $_header = array_shift($_rows);
-
+        $_productsArray = array();
         foreach ($_rows as $_row) {
-            $_product = $this->productFactory->create();
-            $_data = [];
-            foreach ($_row as $_key => $_value) {
-                $_data[$_header[$_key]] = $_value;
-            }
-            $_row = $_data;
-            $_product->load($_product->getIdBySku($_row['sku']));
-            $_product->setStoreId($_viewId);
-            $_product->setName($_row['name']);
-            $_product->setData('description',$_row['description']);
-            $_product->save();
-            unset($_product);
+            $_productsArray[] = array_combine($_header, $_row);
         }
+        echo "\narray size ".count($_productsArray)."\n";
+        $this->importerModel  = $this->objectManager->create('FireGento\FastSimpleImport2\Model\Importer');
+        echo "start import ".date('Y/m/d H:i:s')."\n";
+        try {
+            $this->importerModel->processImport($_productsArray);
+        } catch (\Exception $e) {
+            print_r($e->getMessage());
+        }
+
+        print_r($this->importerModel->getLogTrace());
+        print_r($this->importerModel->getErrorMessages());
+        echo "end import ".date('Y/m/d H:i:s')."\n";
+        /*foreach ($_rows as $_row) {
+
+                $_product = $this->productFactory->create();
+                $_data = [];
+                foreach ($_row as $_key => $_value) {
+                    $_data[$_header[$_key]] = $_value;
+                }
+                $_row = $_data;
+                echo $_row['sku'] . "\n";
+                $_product->load($_product->getIdBySku($_row['sku']));
+                $_product->setStoreId($_viewId);
+                $_product->setName($_row['name']);
+                $_product->setData('description', $_row['description']);
+
+            try {
+                $_product->save();
+            }catch (Exception $e){
+                echo $_row['sku'] . "Failed\n";
+            }
+                unset($_product);
+
+        }*/
     }
 }
