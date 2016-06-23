@@ -2,7 +2,7 @@
     "name": "magentoese/module-luma-de-products",
     "type": "magento2-module",
     "repositories": {
-        "firegento_fastsimpleimport": {
+        "firegento_fastsimpleimport2": {
             "type": "vcs",
             "url": "https://github.com/firegento/FireGento_FastSimpleImport2"
         }

@@ -49,13 +49,13 @@ class InstallData implements InstallDataInterface
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         //Need to reindex to make sure the 2nd store index tables exist before saving products.
-        //$this->index->reindexAll();
+        $this->index->reindexAll();
 
         //get view id from view code
         $_viewId = $this->storeView->load($this->config['viewCode'])->getStoreId();
 
-        //get category label translations
-        $_fileName = $this->fixtureManager->getFixture('MagentoEse_LumaDEProducts::fixtures/Test.csv');
+        //get main product translations
+        $_fileName = $this->fixtureManager->getFixture('MagentoEse_LumaDEProducts::fixtures/Products.csv');
         $_rows = $this->csvReader->getData($_fileName);
 
         $_header = array_shift($_rows);
@@ -63,7 +63,6 @@ class InstallData implements InstallDataInterface
         foreach ($_rows as $_row) {
             $_productsArray[] = array_combine($_header, $_row);
         }
-        echo "\narray size ".count($_productsArray)."\n";
         $this->importerModel  = $this->objectManager->create('FireGento\FastSimpleImport2\Model\Importer');
         echo "start import ".date('Y/m/d H:i:s')."\n";
         try {
@@ -72,10 +71,15 @@ class InstallData implements InstallDataInterface
             print_r($e->getMessage());
         }
 
-        print_r($this->importerModel->getLogTrace());
-        print_r($this->importerModel->getErrorMessages());
-        echo "end import ".date('Y/m/d H:i:s')."\n";
-        /*foreach ($_rows as $_row) {
+        //print_r($this->importerModel->getLogTrace());
+        //print_r($this->importerModel->getErrorMessages());
+        //get translations for downloadable and bundled products
+        $_fileName = $this->fixtureManager->getFixture('MagentoEse_LumaDEProducts::fixtures/DownloadsAndGroups.csv');
+        $_rows = $this->csvReader->getData($_fileName);
+
+        $_header = array_shift($_rows);
+
+        foreach ($_rows as $_row) {
 
                 $_product = $this->productFactory->create();
                 $_data = [];
@@ -83,7 +87,6 @@ class InstallData implements InstallDataInterface
                     $_data[$_header[$_key]] = $_value;
                 }
                 $_row = $_data;
-                echo $_row['sku'] . "\n";
                 $_product->load($_product->getIdBySku($_row['sku']));
                 $_product->setStoreId($_viewId);
                 $_product->setName($_row['name']);
@@ -96,6 +99,6 @@ class InstallData implements InstallDataInterface
             }
                 unset($_product);
 
-        }*/
+        }
     }
 }
