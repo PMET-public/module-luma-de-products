@@ -2,6 +2,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
     <module name="MagentoEse_LumaDEProducts" setup_version="0.0.1">
         <sequence>
+            <module name="Magento_ImportExport"/>
             <module name="Magento_SampleData"/>
             <module name="Magento_CatalogSampleData"/>
             <module name="Magento_BundleSampleData"/>
@@ -9,6 +10,8 @@
             <module name="Magento_GroupedSampleData"/>
             <module name="Magento_CmsSampleData"/>
             <module name="MagentoEse_LumaDESetup"/>
+            <module name="MagentoEse_LumaDEAttributes"/>
+            <module name="MagentoEse_LumaDECategories"/>
         </sequence>
     </module>
 </config>
