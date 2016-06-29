@@ -63,13 +63,12 @@ class InstallData implements InstallDataInterface
         foreach ($_rows as $_row) {
             $_productsArray[] = array_combine($_header, $_row);
         }
-        $this->importerModel  = $this->objectManager->create('FireGento\FastSimpleImport2\Model\Importer');
-        echo "start import ".date('Y/m/d H:i:s')."\n";
+        $this->importerModel  = $this->objectManager->create('MagentoEse\LumaDEProducts\Model\Importer');
         try {
             $this->importerModel->processImport($_productsArray);
         } catch (\Exception $e) {
             print_r($e->getMessage());
-        }
+       }
 
         //print_r($this->importerModel->getLogTrace());
         //print_r($this->importerModel->getErrorMessages());

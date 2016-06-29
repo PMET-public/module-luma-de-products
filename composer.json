@@ -1,17 +1,7 @@
 {
     "name": "magentoese/module-luma-de-products",
     "type": "magento2-module",
-    "repositories": {
-         "firegento_fastsimpleimport": {
-            "type": "vcs",
-            "url": "https://github.com/firegento/FireGento_FastSimpleImport2"
-        }
-    },
-    "require": {
-        "magento/framework": "*",
-        "firegento/fastsimpleimport2": "dev-master"
-    },
-    "autoload": {
+     "autoload": {
         "files": [ "registration.php" ],
         "psr-4": {
             "MagentoEse\\LumaDEProducts\\": ""
