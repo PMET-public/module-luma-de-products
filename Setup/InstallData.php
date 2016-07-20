@@ -70,8 +70,8 @@ class InstallData implements InstallDataInterface
             print_r($e->getMessage());
        }
 
-        //print_r($this->importerModel->getLogTrace());
-        //print_r($this->importerModel->getErrorMessages());
+        print_r($this->importerModel->getLogTrace());
+        print_r($this->importerModel->getErrorMessages());
         //get translations for downloadable and bundled products
         $_fileName = $this->fixtureManager->getFixture('MagentoEse_LumaDEProducts::fixtures/DownloadsAndGroups.csv');
         $_rows = $this->csvReader->getData($_fileName);
@@ -90,6 +90,7 @@ class InstallData implements InstallDataInterface
                 $_product->setStoreId($_viewId);
                 $_product->setName($_row['name']);
                 $_product->setData('description', $_row['description']);
+                $_product->setData('short_description', $_row['short_description']);
 
             try {
                 $_product->save();
