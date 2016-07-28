@@ -51,10 +51,10 @@ class Importer
         $this->configHelper = $configHelper;
 
         $sourceData = [
-            'entity' => $this->configHelper->getEntity(),
-            'behavior' => $this->configHelper->getBehavior(),
-            'validation_strategy' => $this->configHelper->getValidationStrategy(),
-            'allowed_error_count' => $this->configHelper->getAllowedErrorCount(),
+            'entity' => 'catalog_product',
+            'behavior' => 'append',
+            'validation_strategy' => 'validation-stop-on-errors',
+            'allowed_error_count' => 10,
             'import_images_file_dir' => $this->configHelper->getImportFileDir(),
         ];
 
