@@ -13,6 +13,8 @@
             <module name="MagentoEse_LumaDESetup"/>
             <module name="MagentoEse_LumaDEAttributes"/>
             <module name="MagentoEse_LumaDECategories"/>
+            <module name="MagentoEse_LumaDECategories"/>
+            <module name="MagentoEse_VeniaProductInstall"/>
         </sequence>
     </module>
 </config>

@@ -94,11 +94,12 @@ class InstallData implements InstallDataInterface
 
             try {
                 $_product->save();
-            }catch (Exception $e){
+            }catch (\Exception $e){
                 echo $_row['sku'] . "Failed\n";
             }
                 unset($_product);
 
         }
+        unset($this->importerModel);
     }
 }
