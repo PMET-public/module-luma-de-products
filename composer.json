@@ -1,7 +1,11 @@
 {
     "name": "magentoese/module-luma-de-products",
     "type": "magento2-module",
-    "version": "2.0",
+    "version": "3.0.0",
+    "require": {
+        "magento/framework": "*",
+        "magentoese/module-data-install": "*"
+    },
      "autoload": {
         "files": [ "registration.php" ],
         "psr-4": {

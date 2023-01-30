@@ -15,6 +15,7 @@
             <module name="MagentoEse_LumaDECategories"/>
             <module name="MagentoEse_LumaDECategories"/>
             <module name="MagentoEse_VeniaProductInstall"/>
+            <module name="MagentoEse_DataInstall"/>
         </sequence>
     </module>
 </config>
