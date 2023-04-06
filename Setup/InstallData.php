@@ -2,10 +2,17 @@
 
 namespace MagentoEse\LumaDEProducts\Setup;
 
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Framework\App\State;
+use Magento\Framework\File\Csv;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-
+use Magento\Framework\Setup\SampleData\Context;
+use Magento\Framework\Setup\SampleData\FixtureManager;
+use Magento\Indexer\Model\Processor;
+use Magento\Store\Model\Store;
 
     /**
  * @codeCoverageIgnore
@@ -13,19 +20,61 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 class InstallData implements InstallDataInterface
 {
 
-    private $sampleDataContext;
+    /**
+     * 
+     * @var Store
+     */
     private $storeView;
-    private $product;
-    private $state;
-    private $index;
+
+    /**
+     * 
+     * @var ObjectManagerInterface
+     */
     private $objectManager;
 
+    /**
+     * 
+     * @var array
+     */
+    private $config;
 
+    /**
+     * 
+     * @var FixtureManager
+     */
+    private $fixtureManager;
+
+    /**
+     * 
+     * @var Csv
+     */
+    private $csvReader;
+
+    /**
+     * 
+     * @var ProductFactory
+     */
+    private $productFactory;
+
+    /**
+     * 
+     * @var MagentoEse\DataInstall\Model\Import\Importer\Importer
+     */
+    private $importerModel;
+
+    /**
+     * 
+     * @param Context $sampleDataContext 
+     * @param Store $storeView 
+     * @param ProductFactory $productFactory 
+     * @param State $state 
+     * @param ObjectManagerInterface $objectManager 
+     * @return void 
+     */
     public function __construct(\Magento\Framework\Setup\SampleData\Context $sampleDataContext,
                                 \Magento\Store\Model\Store $storeView,
                                 \Magento\Catalog\Model\ProductFactory $productFactory,
                                 \Magento\Framework\App\State $state,
-                                \Magento\Indexer\Model\Processor $index,
                                 \Magento\Framework\ObjectManagerInterface   $objectManager)
     {
 
@@ -41,7 +90,6 @@ class InstallData implements InstallDataInterface
         $this->csvReader = $sampleDataContext->getCsvReader();
         $this->storeView = $storeView;
         $this->productFactory = $productFactory;
-        $this->index = $index;
         $this->objectManager=$objectManager;
 
     }
